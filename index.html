@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure Login & Registration | Rohan ch</title>
+    <link rel="stylesheet" href="login form index.css" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://www.google.com/recaptcha/api.js?render=6LeNLXUrAAAAAL6FlpVEM4-E-ObuDwb5MRxc_5_J"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <!-- Login Form -->
+      <form id="login-form" class="auth-form" style="display: block;">
+        <h1>Login</h1>
+        
+        <div class="input-box">
+          <input type="text" id="login-username" placeholder="Username" required />
+          <i class="bx bxs-user"></i>
+        </div>
+        
+        <div class="input-box" id="password-box">
+          <input type="password" id="login-password" placeholder="Password" required />
+          <i class="bx bxs-lock-alt"></i>
+        </div>
+
+        <!-- MFA Code (hidden initially, shown after password step) -->
+        <div class="input-box" id="otp-box" style="display:none;">
+          <input type="text" id="otp-code" placeholder="Enter 6-digit OTP from Gmail" maxlength="6" pattern="[0-9]{6}" />
+          <i class="bx bxs-shield"></i>
+        </div>
+
+        <div class="input-box terms">
+          <label style="font-size: 13px;">
+            <input type="checkbox" id="login-terms" required>
+            I accept the <a href="https://policies.google.com/terms" target="_blank">Terms and Conditions</a> and <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a>.
+          </label>
+        </div>
+
+        <div class="remember-forget">
+          <label><input type="checkbox" id="remember-me">Remember Me</label>
+          <a href="#" id="forgot-password">Forgot Password?</a>
+        </div>
+
+        <div id="login-message" class="message"></div>
+        <button type="submit" class="btn">Login</button>
+        
+        <div class="register-link">
+          <p>Don't have an account? <a href="#" id="show-register">Register</a></p>
+        </div>
+
+        <input type="hidden" id="csrf-token-login" name="_csrf" value="">
+      </form>
+
+      <!-- Registration Form -->
+      <form id="register-form" class="auth-form" style="display: none;">
+        <h1>Register</h1>
+        
+        <div class="input-box">
+          <input type="text" id="reg-fullname" placeholder="Full Name" required />
+          <i class="bx bxs-user"></i>
+        </div>
+        
+        <div class="input-box">
+          <input type="text" id="reg-username" placeholder="Username" required />
+          <i class="bx bxs-user"></i>
+        </div>
+        
+        <div class="input-box">
+          <input type="email" id="reg-email" placeholder="Email" required />
+          <i class="bx bxs-envelope"></i>
+        </div>
+        
+        <div class="input-box">
+          <input type="tel" id="reg-phone" placeholder="Phone Number" pattern="[0-9]{10,15}" required />
+          <i class="bx bxs-phone"></i>
+        </div>
+        
+        <div class="input-box">
+          <input type="password" id="reg-password" placeholder="Password" required />
+          <i class="bx bxs-lock-alt"></i>
+        </div>
+        
+        <div id="password-strength" class="strength-indicator"></div>
+        
+        <div class="input-box">
+          <input type="password" id="reg-confirm-password" placeholder="Confirm Password" required />
+          <i class="bx bxs-lock-alt"></i>
+        </div>
+
+        <div id="password-match-error" class="error-message"></div>
+        <div id="register-message" class="message"></div>
+        
+        <div class="input-box terms">
+          <label style="font-size: 13px;">
+            <input type="checkbox" id="register-terms" required>
+            I accept the <a href="https://policies.google.com/terms" target="_blank">Terms and Conditions</a> and <a href="https://policies.google.com/privacy" target="_blank">Privacy Policy</a>.
+          </label>
+        </div>
+        
+        <button type="submit" class="btn">Register</button>
+        
+        <div class="register-link">
+          <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+        </div>
+
+        <input type="hidden" id="csrf-token-register" name="_csrf" value="">
+      </form>
+    </div>
+
+    <script>
+      // Global variables
+      let authToken = '';
+      let csrfToken = '';
+
+      // DOM elements
+      const loginForm = document.getElementById('login-form');
+      const registerForm = document.getElementById('register-form');
+      const showRegister = document.getElementById('show-register');
+      const showLogin = document.getElementById('show-login');
+
+      // Form switching
+      showRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+      });
+
+      showLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+      });
+
+      // Password strength indicator
+      const passwordInput = document.getElementById('reg-password');
+      const passwordStrength = document.getElementById('password-strength');
+
+      passwordInput.addEventListener('input', function() {
+        const val = passwordInput.value;
+        let strength = '';
+        let color = '#ff4d4d';
+        
+        if (val.length < 6) {
+          strength = 'Weak';
+          color = '#ff4d4d';
+        } else if (val.match(/[A-Z]/) && val.match(/[0-9]/) && val.match(/[^A-Za-z0-9]/) && val.length >= 8) {
+          strength = 'Strong';
+          color = '#00e676';
+        } else if (val.match(/[A-Z]/) && val.match(/[0-9]/) && val.length >= 7) {
+          strength = 'Medium';
+          color = '#ffeb3b';
+        } else {
+          strength = 'Weak';
+          color = '#ff4d4d';
+        }
+        
+        passwordStrength.textContent = 'Password Strength: ' + strength;
+        passwordStrength.style.color = color;
+      });
+
+      // Password match validation
+      const confirmPasswordInput = document.getElementById('reg-confirm-password');
+      const matchError = document.getElementById('password-match-error');
+
+      confirmPasswordInput.addEventListener('input', function() {
+        if (passwordInput.value !== confirmPasswordInput.value) {
+          matchError.textContent = 'Passwords do not match.';
+          matchError.style.display = 'block';
+        } else {
+          matchError.style.display = 'none';
+        }
+      });
+
+      // CSRF token setup
+      fetch('/api/csrf-token')
+        .then(res => res.json())
+        .then(data => {
+          csrfToken = data.csrfToken;
+          document.getElementById('csrf-token-login').value = csrfToken;
+          document.getElementById('csrf-token-register').value = csrfToken;
+        });
+
+      // API Functions
+      async function registerUser(userData) {
+        try {
+          const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'CSRF-Token': csrfToken
+            },
+            body: JSON.stringify(userData)
+          });
+          
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Registration error:', error);
+          return { success: false, message: 'Network error during registration' };
+        }
+      }
+
+      async function loginUser(userData) {
+        try {
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'CSRF-Token': csrfToken
+            },
+            body: JSON.stringify(userData)
+          });
+          
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('Login error:', error);
+          return { success: false, message: 'Network error during login' };
+        }
+      }
+
+      async function verifyRecaptcha(token) {
+        const response = await axios.post(
+          `https://www.google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET}&response=${token}`
+        );
+        return response.data.success && response.data.score > 0.5; // v3 uses a score
+      }
+
+      // Login form submission (two-step MFA) with reCAPTCHA v3
+      let mfaStep = 1;
+      let loginUsername = '';
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!document.getElementById('login-terms').checked) {
+          const loginMessage = document.getElementById('login-message');
+          loginMessage.textContent = 'You must accept the terms and conditions.';
+          loginMessage.className = 'message error';
+          return;
+        }
+        grecaptcha.ready(function() {
+          grecaptcha.execute('6LeNLXUrAAAAAL6FlpVEM4-E-ObuDwb5MRxc_5_J', {action: 'login'}).then(async function(token) {
+            const loginMessage = document.getElementById('login-message');
+            if (mfaStep === 1) {
+              // Step 1: Username & Password
+              const username = document.getElementById('login-username').value.trim();
+              const password = document.getElementById('login-password').value.trim();
+              loginMessage.textContent = 'Verifying credentials...';
+              loginMessage.className = 'message loading';
+              const result = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password, recaptchaToken: token })
+              }).then(r => r.json());
+              if (result.success && result.mfaRequired) {
+                document.getElementById('password-box').style.display = 'none';
+                document.getElementById('otp-box').style.display = 'block';
+                mfaStep = 2;
+                loginUsername = username;
+              } else {
+                loginMessage.textContent = result.message;
+                loginMessage.className = 'message error';
+              }
+            } else if (mfaStep === 2) {
+              // Step 2: OTP
+              const otp = document.getElementById('otp-code').value.trim();
+              loginMessage.textContent = 'Verifying OTP...';
+              loginMessage.className = 'message';
+              const result = await fetch('/api/verify-otp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: loginUsername, otp })
+              }).then(r => r.json());
+              if (result.success) {
+                authToken = result.token;
+                loginMessage.textContent = result.message;
+                loginMessage.className = 'message success';
+                localStorage.setItem('authToken', result.token);
+                localStorage.setItem('user', JSON.stringify(result.user));
+                setTimeout(() => {
+                  loginMessage.textContent = '';
+                  loginForm.reset();
+                  window.location.href = 'dashboard.html';
+                }, 2000);
+              } else {
+                loginMessage.textContent = result.message;
+                loginMessage.className = 'message error';
+              }
+            }
+          });
+        });
+      });
+
+      // Registration form submission with reCAPTCHA v3
+      registerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (!document.getElementById('register-terms').checked) {
+          const registerMessage = document.getElementById('register-message');
+          registerMessage.textContent = 'You must accept the terms and conditions.';
+          registerMessage.className = 'message error';
+          return;
+        }
+        grecaptcha.ready(function() {
+          grecaptcha.execute('6LeNLXUrAAAAAL6FlpVEM4-E-ObuDwb5MRxc_5_J', {action: 'register'}).then(async function(token) {
+            const fullname = document.getElementById('reg-fullname').value.trim();
+            const username = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const phone = document.getElementById('reg-phone').value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            const registerMessage = document.getElementById('register-message');
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+              matchError.textContent = 'Passwords do not match.';
+              matchError.style.display = 'block';
+              return;
+            }
+
+            // Show loading state
+            registerMessage.textContent = 'Registering...';
+            registerMessage.className = 'message';
+
+            // Call backend API
+            const result = await registerUser({
+              fullname,
+              username,
+              email,
+              phone,
+              password,
+              confirmPassword,
+              recaptchaToken: token
+            });
+
+            if (result.success) {
+              authToken = result.token;
+              registerMessage.textContent = result.message;
+              registerMessage.className = 'message success';
+              localStorage.setItem('authToken', result.token);
+              localStorage.setItem('user', JSON.stringify(result.user));
+              registerForm.reset();
+              passwordStrength.textContent = '';
+              matchError.style.display = 'none';
+              setTimeout(() => {
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                registerMessage.textContent = '';
+                console.log('User registered:', result.user);
+              }, 2000);
+            } else {
+              registerMessage.textContent = result.message;
+              registerMessage.className = 'message error';
+            }
+          });
+        });
+      });
+
+      // Initialize on page load
+      // Check if user is already logged in
+      const savedToken = localStorage.getItem('authToken');
+      const savedUser = localStorage.getItem('user');
+      
+      if (savedToken && savedUser) {
+        console.log('User already logged in:', JSON.parse(savedUser));
+        // You can redirect to dashboard here
+      }
+    </script>
+  </body>
+</html>
