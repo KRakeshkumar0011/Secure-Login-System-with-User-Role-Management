@@ -1,0 +1,206 @@
+[
+  {
+    "id": 1,
+    "fullname": "Rohan Chaudhary",
+    "username": "Rohan",
+    "email": "boey0587@gmail.com",
+    "phone": "9840224341",
+    "password": "$2a$10$advUB2DPVpBg5h/69pF.kemDyssusF/HXiawgWo.GQKj1X/K/XR0i",
+    "role": "admin",
+    "createdAt": "2025-07-01T12:27:21.854Z",
+    "loginActivity": [
+      {
+        "time": "7/3/2025, 4:26:18 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/3/2025, 4:52:02 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/3/2025, 7:00:00 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/3/2025, 10:42:34 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/3/2025, 11:09:24 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/3/2025, 11:19:34 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/3/2025, 11:39:27 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/4/2025, 12:06:42 AM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/4/2025, 3:48:47 AM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/4/2025, 5:00:00 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/4/2025, 5:11:19 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/4/2025, 5:26:46 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/4/2025, 6:38:11 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/24/2025, 1:00:11 PM",
+        "ip": "::1"
+      }
+    ],
+    "notifications": [
+      "New login from ::1 at 7/3/2025, 11:09:24 PM",
+      "New login from ::1 at 7/3/2025, 11:19:34 PM",
+      "New login from ::1 at 7/3/2025, 11:39:27 PM",
+      "New login from ::1 at 7/4/2025, 12:06:42 AM",
+      "New login from ::1 at 7/4/2025, 3:48:47 AM",
+      "New login from ::1 at 7/4/2025, 5:00:00 PM",
+      "New login from ::1 at 7/4/2025, 5:11:19 PM",
+      "New login from ::1 at 7/4/2025, 5:26:46 PM",
+      "New login from ::1 at 7/4/2025, 6:38:11 PM",
+      "New login from ::1 at 7/24/2025, 1:00:11 PM"
+    ],
+    "profilePic": "/profile-pics/user1_1751539927685.png"
+  },
+  {
+    "id": 2,
+    "fullname": "Rohan Chaudhary",
+    "username": "Rohan1",
+    "email": "kit22d.01roh@ismt.edu.np",
+    "phone": "9826850087",
+    "password": "$2a$10$8.J8uAanww1OxfYNUkseQ.H6rshlTBvazu0ua.O4yLzSdeJM3RB.y",
+    "role": "user",
+    "createdAt": "2025-07-01T17:45:03.738Z",
+    "loginActivity": [
+      {
+        "time": "7/3/2025, 10:59:52 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/3/2025, 11:15:25 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/3/2025, 11:17:15 PM",
+        "ip": "::1"
+      },
+      {
+        "time": "7/3/2025, 11:22:01 PM",
+        "ip": "::1"
+      }
+    ],
+    "notifications": [
+      "New login from ::1 at 7/3/2025, 10:59:52 PM",
+      "New login from ::1 at 7/3/2025, 11:15:25 PM",
+      "New login from ::1 at 7/3/2025, 11:17:15 PM",
+      "New login from ::1 at 7/3/2025, 11:22:01 PM"
+    ],
+    "profilePic": ""
+  },
+  {
+    "id": 3,
+    "fullname": "Abish Poudel",
+    "username": "Abish",
+    "email": "piratespaudel@gmail.com",
+    "phone": "9826850087",
+    "password": "$2a$10$k9c3d26KZf4B6YtJojHZfOyXRphLBpeUwPdDdndtU//OUHdbUmvAi",
+    "role": "user",
+    "createdAt": "2025-07-03T06:14:23.489Z"
+  },
+  {
+    "id": 4,
+    "fullname": "Pradip Poudel",
+    "username": "Pradip",
+    "email": "poudelpradeep@gmail.com",
+    "phone": "9811037643",
+    "password": "$2a$10$IPFMYfGDpaMyoldMj2nB9u8oWKmpPx7l.id95jCy1B0Pl4pW0DWXS",
+    "role": "user",
+    "createdAt": "2025-07-03T10:54:27.241Z"
+  },
+  {
+    "id": 5,
+    "fullname": "Pradip Poudel1",
+    "username": "Pradip1",
+    "email": "poudelpradeep72@gmail.com",
+    "phone": "9811037643",
+    "password": "$2a$10$vvo6pCxyrvwIxIznn1ULJeLG.7Zqv0uepoZrXWxKwa/fIvOJ2J0N.",
+    "role": "user",
+    "createdAt": "2025-07-03T10:56:51.766Z",
+    "loginActivity": [
+      {
+        "time": "7/3/2025, 4:45:19 PM",
+        "ip": "::1"
+      }
+    ],
+    "notifications": [
+      "New login from ::1 at 7/3/2025, 4:45:19 PM"
+    ],
+    "profilePic": ""
+  },
+  {
+    "id": 6,
+    "fullname": "Testing",
+    "username": "Video",
+    "email": "pimaro5569@dxirl.com",
+    "phone": "9840224342",
+    "password": "$2a$10$kxXWVc4abCTeEQDZh3GjUOhyPzKxVocxdTRniOh072IMJCC8NYZje",
+    "role": "user",
+    "createdAt": "2025-07-04T11:21:51.518Z",
+    "loginActivity": [
+      {
+        "time": "7/4/2025, 5:09:15 PM",
+        "ip": "::1"
+      }
+    ],
+    "notifications": [
+      "New login from ::1 at 7/4/2025, 5:09:15 PM"
+    ]
+  },
+  {
+    "id": 7,
+    "fullname": "Rohan Testing",
+    "username": "Rohan Testing",
+    "email": "cifane@forexnews.bg",
+    "phone": "9840224343",
+    "password": "$2a$10$.NyGaWfaDgJacRu15nGRe.YO.HEg/rMxIshy6hnnhZI6cqkfrMy6u",
+    "role": "user",
+    "createdAt": "2025-07-04T11:34:25.099Z"
+  },
+  {
+    "id": 8,
+    "fullname": "Rohan Test",
+    "username": "Rohan Test",
+    "email": "rileget714@dxirl.com",
+    "phone": "9840224344",
+    "password": "$2a$10$NBsvO2n7oEnGc1TZywXUAui3Khz91nUrO0lEtRou8AAu5PQaLm3FS",
+    "role": "user",
+    "createdAt": "2025-07-04T11:39:19.151Z",
+    "loginActivity": [
+      {
+        "time": "7/4/2025, 5:25:26 PM",
+        "ip": "::1"
+      }
+    ],
+    "notifications": [
+      "New login from ::1 at 7/4/2025, 5:25:26 PM"
+    ]
+  }
+]
