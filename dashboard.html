@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <style>
+    :root {
+      --sidebar-bg: rgba(30, 41, 59, 0.85);
+      --sidebar-accent: #7f5af0;
+      --main-bg: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+      --glass-bg: rgba(255,255,255,0.25);
+      --glass-border: rgba(255,255,255,0.18);
+      --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+      --primary: #7f5af0;
+      --secondary: #2cb67d;
+      --danger: #ff4d4f;
+      --text: #22223b;
+      --text-light: #a0aec0;
+    }
+    body {
+      margin: 0;
+      font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--main-bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+    }
+    .sidebar {
+      width: 240px;
+      background: var(--sidebar-bg);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 0 24px 0;
+      box-shadow: 2px 0 24px rgba(31,38,135,0.08);
+      position: relative;
+      z-index: 2;
+    }
+    .sidebar .logo {
+      font-size: 2em;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 32px;
+      color: var(--sidebar-accent);
+      text-shadow: 0 2px 8px #0002;
+    }
+    .sidebar nav {
+      width: 100%;
+    }
+    .sidebar nav a {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 32px;
+      color: #fff;
+      text-decoration: none;
+      font-size: 1.1em;
+      border-left: 4px solid transparent;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .sidebar nav a.active, .sidebar nav a:hover {
+      background: rgba(127,90,240,0.12);
+      border-left: 4px solid var(--sidebar-accent);
+      color: var(--sidebar-accent);
+    }
+    .sidebar .logout-btn {
+      margin-top: auto;
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      padding: 10px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .sidebar .logout-btn:hover {
+      background: #d7263d;
+    }
+    .main {
+      flex: 1;
+      padding: 48px 5vw;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      background: var(--main-bg);
+      min-height: 100vh;
+    }
+    .profile-card {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      background: var(--glass-bg);
+      border-radius: 24px;
+      box-shadow: var(--card-shadow);
+      border: 1.5px solid var(--glass-border);
+      padding: 32px 40px;
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+    .profile-ring {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .profile-ring svg {
+      position: absolute;
+      top: 0; left: 0;
+    }
+    .profile-img {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 8px #0001;
+      z-index: 1;
+    }
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .profile-info .welcome {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .profile-info .email {
+      color: var(--text-light);
+      font-size: 1em;
+    }
+    .profile-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .theme-switcher {
+      background: var(--secondary);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .theme-switcher:hover {
+      background: #24915e;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 32px;
+    }
+    .card {
+      background: var(--glass-bg);
+      border-radius: 18px;
+      box-shadow: var(--card-shadow);
+      border: 1.5px solid var(--glass-border);
+      padding: 28px 24px 24px 24px;
+      position: relative;
+      backdrop-filter: blur(10px);
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 32px 0 rgba(127,90,240,0.10);
+    }
+    .card .card-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--primary);
+    }
+    .card .card-content {
+      flex: 1;
+      color: var(--text);
+    }
+    .quick-links {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .quick-link {
+      flex: 1;
+      background: #e0e7ff;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+      transition: background 0.2s, color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .quick-link:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .notification {
+      background: #fffbe6;
+      color: #ad8b00;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 1em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .support {
+      background: #e6f7ff;
+      color: #0050b3;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-size: 1em;
+      margin-top: 12px;
+    }
+    @media (max-width: 900px) {
+      .main {
+        padding: 32px 2vw;
+      }
+      .sidebar {
+        width: 70px;
+        padding: 24px 0 12px 0;
+      }
+      .sidebar nav a span {
+        display: none;
+      }
+      .sidebar .logo {
+        font-size: 1.2em;
+        margin-bottom: 18px;
+      }
+    }
+    @media (max-width: 700px) {
+      .main {
+        padding: 16px 0.5vw;
+      }
+      .cards {
+        grid-template-columns: 1fr;
+      }
+      .profile-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        padding: 24px 16px;
+      }
+      .profile-actions {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo"><i class="fa-solid fa-leaf"></i> DASH</div>
+    <nav>
+      <a href="#" class="active"><i class="fa-solid fa-gauge"></i> <span>Dashboard</span></a>
+      <a href="#profile"><i class="fa-solid fa-user"></i> <span>Profile</span></a>
+      <a href="#activity"><i class="fa-solid fa-clock-rotate-left"></i> <span>Activity</span></a>
+      <a href="#settings"><i class="fa-solid fa-gear"></i> <span>Settings</span></a>
+      <a href="#support"><i class="fa-solid fa-circle-question"></i> <span>Support</span></a>
+    </nav>
+    <button class="logout-btn" id="logout-btn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+  </aside>
+  <main class="main">
+    <section class="profile-card">
+      <div class="profile-ring">
+        <svg width="90" height="90">
+          <circle cx="45" cy="45" r="40" stroke="#e0e7ff" stroke-width="8" fill="none"/>
+          <circle cx="45" cy="45" r="40" stroke="#7f5af0" stroke-width="8" fill="none" stroke-dasharray="251.2" stroke-dashoffset="40"/>
+        </svg>
+        <img src="https://ui-avatars.com/api/?name=User" alt="Profile" class="profile-img" id="profile-img">
+      </div>
+      <div class="profile-info">
+        <div class="welcome" id="welcome-msg">Welcome, User!</div>
+        <div class="email" id="user-email">user@email.com</div>
+        <form id="profile-pic-form" enctype="multipart/form-data" style="margin-top:10px;">
+          <input type="file" id="profile-pic-input" name="profilePic" accept="image/*" style="margin-bottom:6px;">
+          <button type="submit" style="padding:4px 12px; border-radius:6px; border:none; background:#7f5af0; color:#fff; font-weight:500;">Upload</button>
+          <div id="profile-pic-msg" style="font-size:0.95em; margin-top:4px;"></div>
+        </form>
+      </div>
+      <div class="profile-actions">
+        <button class="theme-switcher" id="theme-switcher"><i class="fa-solid fa-moon"></i> Theme</button>
+      </div>
+    </section>
+    <div class="cards">
+      <div class="card">
+        <div class="card-title"><i class="fa-solid fa-key"></i> Change Password</div>
+        <div class="card-content">
+          <form id="change-password-form">
+            <input type="password" id="old-password" placeholder="Old Password" required style="width:100%;margin-bottom:8px;padding:8px;">
+            <input type="password" id="new-password" placeholder="New Password" required style="width:100%;margin-bottom:8px;padding:8px;">
+            <input type="password" id="confirm-password" placeholder="Confirm New Password" required style="width:100%;margin-bottom:8px;padding:8px;">
+            <button type="submit" style="width:100%;padding:10px;background:#7f5af0;color:#fff;border:none;border-radius:6px;font-weight:500;">Change Password</button>
+            <div id="change-password-msg" style="margin-top:8px;"></div>
+          </form>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fa-solid fa-bell"></i> Notifications</div>
+        <div class="card-content" id="notifications">
+          <!-- Notifications will appear here -->
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fa-solid fa-clock-rotate-left"></i> Recent Login Activity</div>
+        <div class="card-content">
+          <ul id="login-activity" style="padding-left:18px; margin:0;">
+            <!-- Recent logins will appear here -->
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fa-solid fa-chart-simple"></i> Statistics</div>
+        <div class="card-content">
+          <div class="stat" id="stat-logins">Total Logins: 0</div>
+          <div class="stat" id="stat-last-login">Last Login: -</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fa-solid fa-link"></i> Quick Links</div>
+        <div class="card-content">
+          <div class="quick-links">
+            <a href="#profile" class="quick-link"><i class="fa-solid fa-user-pen"></i> Edit Profile</a>
+            <a href="#settings" class="quick-link"><i class="fa-solid fa-gear"></i> Settings</a>
+            <a href="#support" class="quick-link"><i class="fa-solid fa-circle-question"></i> Support</a>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="fa-solid fa-circle-info"></i> Support</div>
+        <div class="card-content support">
+          <strong>Need help?</strong><br>
+          <a href="mailto:support@example.com">Contact Support</a> or visit our <a href="#">FAQ</a>.
+        </div>
+      </div>
+    </div>
+  </main>
+  <script>
+    // Helper: Get JWT token
+    function getToken() {
+      return localStorage.getItem('authToken') || '';
+    }
+
+    // Theme Switcher
+    const themeBtn = document.getElementById('theme-switcher');
+    let dark = false;
+    themeBtn.onclick = function() {
+      dark = !dark;
+      if(dark) {
+        document.body.style.background = 'linear-gradient(135deg, #232946 0%, #121629 100%)';
+        document.body.style.color = '#f4f6fb';
+        document.documentElement.style.setProperty('--glass-bg', 'rgba(30,41,59,0.45)');
+        document.documentElement.style.setProperty('--glass-border', 'rgba(127,90,240,0.18)');
+        document.documentElement.style.setProperty('--text', '#f4f6fb');
+        themeBtn.innerHTML = '<i class="fa-solid fa-sun"></i> Light';
+      } else {
+        document.body.style.background = 'var(--main-bg)';
+        document.body.style.color = 'var(--text)';
+        document.documentElement.style.setProperty('--glass-bg', 'rgba(255,255,255,0.25)');
+        document.documentElement.style.setProperty('--glass-border', 'rgba(255,255,255,0.18)');
+        document.documentElement.style.setProperty('--text', '#22223b');
+        themeBtn.innerHTML = '<i class="fa-solid fa-moon"></i> Theme';
+      }
+    };
+
+    // Fetch user profile info
+    function loadUserProfile() {
+      fetch('/api/user-profile', {
+        headers: { 'Authorization': 'Bearer ' + getToken() }
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('welcome-msg').textContent = `Welcome, ${data.name}!`;
+          document.getElementById('user-email').textContent = data.email;
+          document.getElementById('profile-img').src = data.profilePic || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(data.name);
+        })
+        .catch(() => {
+          document.getElementById('welcome-msg').textContent = 'Welcome!';
+        });
+    }
+    loadUserProfile();
+
+    // Profile picture upload
+    document.getElementById('profile-pic-form').onsubmit = function(e) {
+      e.preventDefault();
+      const fileInput = document.getElementById('profile-pic-input');
+      const msgDiv = document.getElementById('profile-pic-msg');
+      if (!fileInput.files.length) {
+        msgDiv.textContent = 'Please select a file.';
+        msgDiv.style.color = 'red';
+        return;
+      }
+      const formData = new FormData();
+      formData.append('profilePic', fileInput.files[0]);
+      fetch('/api/upload-profile-pic', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + getToken() },
+        body: formData
+      })
+        .then(res => res.json())
+        .then(data => {
+          msgDiv.textContent = data.message;
+          msgDiv.style.color = data.success ? 'green' : 'red';
+          if (data.success && data.profilePic) {
+            document.getElementById('profile-img').src = data.profilePic;
+          }
+        })
+        .catch(() => {
+          msgDiv.textContent = 'Upload failed.';
+          msgDiv.style.color = 'red';
+        });
+    };
+
+    // Fetch notifications
+    function loadNotifications() {
+      fetch('/api/notifications', {
+        headers: { 'Authorization': 'Bearer ' + getToken() }
+      })
+        .then(res => res.json())
+        .then(data => {
+          const notifDiv = document.getElementById('notifications');
+          notifDiv.innerHTML = '';
+          if (Array.isArray(data) && data.length) {
+            data.forEach(n => {
+              notifDiv.innerHTML += `<div class="notification"><i class="fa-solid fa-bell"></i> ${n}</div>`;
+            });
+          } else {
+            notifDiv.innerHTML = '<div class="notification">No notifications.</div>';
+          }
+        })
+        .catch(() => {
+          document.getElementById('notifications').innerHTML = '<div class="notification">Error loading notifications.</div>';
+        });
+    }
+    loadNotifications();
+
+    // Fetch login activity
+    function loadLoginActivity() {
+      fetch('/api/login-activity', {
+        headers: { 'Authorization': 'Bearer ' + getToken() }
+      })
+        .then(res => res.json())
+        .then(data => {
+          const list = document.getElementById('login-activity');
+          list.innerHTML = '';
+          if (Array.isArray(data) && data.length) {
+            data.forEach(item => {
+              list.innerHTML += `<li>${item.time} (${item.ip})</li>`;
+            });
+            document.getElementById('stat-logins').textContent = `Total Logins: ${data.length}`;
+            document.getElementById('stat-last-login').textContent = `Last Login: ${data[0].time}`;
+          } else {
+            list.innerHTML = '<li>No login activity.</li>';
+            document.getElementById('stat-logins').textContent = 'Total Logins: 0';
+            document.getElementById('stat-last-login').textContent = 'Last Login: -';
+          }
+        })
+        .catch(() => {
+          document.getElementById('login-activity').innerHTML = '<li>Error loading activity.</li>';
+        });
+    }
+    loadLoginActivity();
+
+    // Change password
+    document.getElementById('change-password-form').onsubmit = function(e) {
+      e.preventDefault();
+      const oldPassword = document.getElementById('old-password').value;
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      const msgDiv = document.getElementById('change-password-msg');
+      if(newPassword !== confirmPassword) {
+        msgDiv.textContent = 'New passwords do not match!';
+        msgDiv.style.color = 'red';
+        return;
+      }
+      fetch('/api/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + getToken()
+        },
+        body: JSON.stringify({ oldPassword, newPassword })
+      })
+      .then(res => res.json())
+      .then(data => {
+        msgDiv.textContent = data.message;
+        msgDiv.style.color = data.success ? 'green' : 'red';
+        if (data.success) {
+          document.getElementById('change-password-form').reset();
+        }
+      })
+      .catch(() => {
+        msgDiv.textContent = 'Error changing password.';
+        msgDiv.style.color = 'red';
+      });
+    };
+
+    // Logout
+    document.getElementById('logout-btn').onclick = function() {
+      fetch('/api/logout', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + getToken() }
+      })
+        .then(() => {
+          localStorage.removeItem('authToken');
+          window.location.href = '/';
+        });
+    };
+
+    // Refresh dashboard data after login, password change, or profile update
+    function refreshDashboard() {
+      loadUserProfile();
+      loadNotifications();
+      loadLoginActivity();
+    }
+    // Optionally, call refreshDashboard() after certain actions if needed
+  </script>
+</body>
+</html>
